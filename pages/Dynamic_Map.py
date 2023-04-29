@@ -27,17 +27,25 @@ dataframe_total, dataframe_no_labels, selected_cols, model = impModel.preprocess
 st.markdown("## Input")
 city = st.selectbox("Which city would you like to predict the prices", Macros.GERMAN_CITIES)
 
+if "markers" not in st.session_state:
+   st.session_state["markers"] = []
+
 def execute_iteraction(city_name):
 
     if city_name == "Berlin":
+        hbf_coordinate = Macros.BERLIN_HBF
         map= gpd.read_file(Macros.PATH_BERLIN_DATA)
     elif city_name == "Bremen":
+        hbf_coordinate = Macros.BREMEN_HBF
         map= gpd.read_file(Macros.PATH_BREMEN_DATA)
     elif city_name == "Dresden":
+        hbf_coordinate = Macros.DRESDEN_HBF
         map= gpd.read_file(Macros.PATH_DRESDEN_DATA)
     elif city_name == "Koln":
+        hbf_coordinate = Macros.KOELN_HBF
         map= gpd.read_file(Macros.PATH_KOLN_DATA)
     else:
+        hbf_coordinate = Macros.FRANKFURT_HBF
         map= gpd.read_file(Macros.PATH_FRANKFURT_DATA)
 
     m = map.explore(height=500, width=1000, name="Neighborhoods")
@@ -48,21 +56,17 @@ def execute_iteraction(city_name):
     last_neighborhoods_fid = 0
     last_click_coords = [0, 0]
 
-    # Create a FeatureGroup for the markers
-    marker_group = folium.FeatureGroup(name='Markers')
-
-    # Add a marker to the FeatureGroup
-    marker_group.add_to(m)
-
-    # Create a LayerControl widget for the map
-    layer_ctrl = folium.LayerControl()
-    m.add_child(layer_ctrl)
+    # Marker updating magic
+    fg = folium.FeatureGroup(name="Markers")
+    for marker in st.session_state["markers"]:
+        fg.add_child(marker)
+    if "last_clicked" not in st.session_state:
+       st.session_state["last_clicked"] = None
 
     # call to render Folium map in Streamlit
-    st_data = st_folium(m, width=725)
+    st_data = st_folium(m, feature_group_to_add=fg, height=450, width=1000,)
 
     if st_data['last_active_drawing'] is not None:
-
         ########## Get FID and Coords ##########
         last_neighborhoods_fid = st_data['last_active_drawing']['properties']['Neighborhood_FID']
         last_click_coords = [st_data['last_clicked']['lat'], st_data['last_clicked']['lng']]
@@ -71,9 +75,35 @@ def execute_iteraction(city_name):
         polygon_coords = st_data['last_active_drawing']['geometry']
         coord = shape(polygon_coords).centroid
         last_neighborhoods_coords = [coord.y, coord.x] #longitude / latitude
-
-        st.write("last neighborhoods FID: {}".format(last_neighborhoods_fid))
+        st.metric("last neighborhoods FID:",last_neighborhoods_fid )
+        
+        random_marker = folium.Marker(location=last_neighborhoods_coords , icon=folium.Icon(color='red'),)
+        hbf_marker = folium.Marker(location=[hbf_coordinate.y, hbf_coordinate.x], icon=folium.Icon(color='red'),)
+        line = folium.PolyLine([last_neighborhoods_coords , (hbf_coordinate.y, hbf_coordinate.x)], color="red", weight=2, opacity=1).add_to(m)
+        st.session_state["markers"].clear()
+        st.session_state["markers"].append(random_marker)
+        st.session_state["markers"].append(hbf_marker)
+        st.session_state["markers"].append(line)
+        
+        if ( st_data["last_clicked"] and st_data["last_clicked"] != st.session_state["last_clicked"]):
+            st.session_state["last_clicked"] = st_data["last_clicked"]
+            st.experimental_rerun()
+        
         return last_neighborhoods_fid
+
+    # if st_data['last_active_drawing'] is not None:
+
+    #     ########## Get FID and Coords ##########
+    #     last_neighborhoods_fid = st_data['last_active_drawing']['properties']['Neighborhood_FID']
+    #     last_click_coords = [st_data['last_clicked']['lat'], st_data['last_clicked']['lng']]
+
+    #     ########## Get centroid from Area ##########
+    #     polygon_coords = st_data['last_active_drawing']['geometry']
+    #     coord = shape(polygon_coords).centroid
+    #     last_neighborhoods_coords = [coord.y, coord.x] #longitude / latitude
+
+    #     st.write("last neighborhoods FID: {}".format(last_neighborhoods_fid))
+    #     return last_neighborhoods_fid
     
 fdi = execute_iteraction(city)
 
