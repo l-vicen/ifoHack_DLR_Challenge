@@ -3,10 +3,9 @@ from ressources import Macros
 
 # Sidebar Style Configuration Helper Method
 def add_dlr_logo_to_page():
-
     # DLR Logo 
     add_logo()
-
+    
     # Contributors
     st.sidebar.markdown('##### Contributors')
     st.sidebar.markdown('Billy Herrmann')

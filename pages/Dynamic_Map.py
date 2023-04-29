@@ -15,7 +15,9 @@ import geopandas as gpd
 import os  
 
 # Map Title
-st.title("Map")
+st.title("Spatial Visualization")
+st.info("In this page, the user is able to get insights into the predicted and actual prices of different neighborhood across German cities.")
+st.write("---")
 
 def execute_iteraction(city_name):
 
@@ -23,13 +25,17 @@ def execute_iteraction(city_name):
         hbf_coordinate = Macros.BERLIN_HBF
         map= gpd.read_file(Macros.PATH_BERLIN_DATA)
     elif city_name == "Bremen":
-        pass
+        hbf_coordinate = Macros.BREMEN_HBF
+        map= gpd.read_file(Macros.PATH_BREMEN_DATA)
     elif city_name == "Dresden":
-        pass
+        hbf_coordinate = Macros.DRESDEN_HBF
+        map= gpd.read_file(Macros.PATH_DRESDEN_DATA)
     elif city_name == "Koln":
-        pass
+        hbf_coordinate = Macros.KOELN_HBF
+        map= gpd.read_file(Macros.PATH_KOLN_DATA)
     else:
-        pass
+        hbf_coordinate = Macros.FRANKFURT_HBF
+        map= gpd.read_file(Macros.PATH_FRANKFURT_DATA)
 
     POI_coord =  gpd.GeoSeries([hbf_coordinate], crs='EPSG:4326')
 
@@ -73,8 +79,20 @@ def execute_iteraction(city_name):
 
         #layer_ctrl.remove_layer(marker_group)
 
-        st.metric("last neighborhoods FID:",last_neighborhoods_fid )
-        st.metric("last neighborhoods center coords:", last_neighborhoods_coords)
-        st.metric("last click coords:", last_click_coords)
+        # st.metric("last neighborhoods FID:",last_neighborhoods_fid )
+        # st.metric("last neighborhoods center coords: {}{}".format, last_neighborhoods_coords)
+        # st.metric("last click coords:", last_click_coords)
+        # return last_neighborhoods_fid, last_neighborhoods_coords, last_click_coords
 
-execute_iteraction("Berlin")
+col1, col2, col3 = st.columns(3)
+col1.markdown("## Input")
+city = col1.selectbox("Which city would you like to predict the prices", Macros.GERMAN_CITIES)
+if (city != None):
+    execute_iteraction(city)
+    col2.markdown("## Output")
+    col2.metric("Model Estimated Price", 1000, 300)
+    col3.metric("Actual Neighboorhood Price:", 500, 250)
+    # col2.metric("Last neighborhoods FID:", district_fid)
+else:
+    col1.warning("Please choose a city to analyze.")
+
