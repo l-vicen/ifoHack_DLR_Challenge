@@ -7,7 +7,7 @@ in other files cleaner.
 from shapely.geometry import Point
 
 # List of cities
-GERMAN_CITIES = ["Berlin", "Bremen", "Dresden", "Frankfurt", "Köln"]
+GERMAN_CITIES = ["Berlin", "Bremen", "Dresden", "Frankfurt am Main", "Köln"]
 
 # App Style Logo
 DLR_LOGO = "assets/DLR_Logo.png"

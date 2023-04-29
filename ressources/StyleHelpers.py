@@ -23,7 +23,7 @@ def add_logo():
                 background-image: url(https://www.dlr.de/static/media/Logo-en.bc10c5b6.svg);
                 background-repeat: no-repeat;
                 padding-top: 135px;
-                background-position: 60px 75px;
+                background-position: 50px 75px;
             }
             [data-testid="stSidebarNav"]::before {
                 margin-left: 100px;

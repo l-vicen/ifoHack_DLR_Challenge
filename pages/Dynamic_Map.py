@@ -4,7 +4,7 @@ from streamlit_folium import st_folium
 import folium
 from ressources import StyleHelpers
 from ressources import Macros
-from ressources.model_predictor import model
+from ressources.model_predictor import model as impModel
 
 ########## Data Processing ##########
 import geopandas as gpd
@@ -17,6 +17,12 @@ StyleHelpers.add_dlr_logo_to_page()
 st.title("Spatial Visualization")
 st.info("In this page, the user is able to get insights into the predicted and actual prices of different neighborhood across German cities.")
 st.write("---")
+
+dataframe_total, dataframe_no_labels, selected_cols, model = impModel.preprocessing()
+# st.dataframe(dataframe_total)
+# st.dataframe(dataframe_no_labels)
+# st.write(selected_cols)
+# st.write(model)
 
 st.markdown("## Input")
 city = st.selectbox("Which city would you like to predict the prices", Macros.GERMAN_CITIES)
@@ -74,7 +80,7 @@ fdi = execute_iteraction(city)
 st.markdown("---")
 st.markdown("## Output")
 if (fdi != None):
-    actual_price, model_price = model.apply_predictor(fdi)
+    actual_price, model_price = impModel.predictor(fdi, city, dataframe_total, dataframe_no_labels, selected_cols, model)
     st.metric("Actual Price", actual_price, 300)
     st.metric("Model Suggested Price", model_price, 250)
     st.success("Prediction Terminated.")
