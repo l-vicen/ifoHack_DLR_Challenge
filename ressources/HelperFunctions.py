@@ -5,14 +5,36 @@ from ressources import Macros
 def add_dlr_logo_to_page():
 
     # DLR Logo 
-    st.sidebar.image(Macros.DLR_LOGO)
+    add_logo()
 
     # Contributors
-    st.sidebar.markdown('---')
     st.sidebar.markdown('##### Contributors')
     st.sidebar.markdown('Billy Herrmann')
     st.sidebar.markdown('Justin Zhang')
     st.sidebar.markdown('Lucas Perasolo')
     st.sidebar.markdown('Rohan Walia')
     st.sidebar.markdown('Sandro Barrius')
-    st.sidebar.markdown('---')
+
+
+
+def add_logo():
+    st.markdown(
+        """
+        <style>
+            [data-testid="stSidebarNav"] {
+                background-image: url(https://www.dlr.de/static/media/Logo-en.bc10c5b6.svg);
+                background-repeat: no-repeat;
+                padding-top: 135px;
+                background-position: 60px 75px;
+            }
+            [data-testid="stSidebarNav"]::before {
+                margin-left: 100px;
+                margin-top: 30px;
+                margin-bottom: 100px;
+                position: relative;
+                top: 100px;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
