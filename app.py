@@ -1,8 +1,8 @@
 import streamlit as st
-from ressources import HelperFunctions
+from ressources import StyleHelpers
 
 # Sidebar Configuration
-HelperFunctions.add_dlr_logo_to_page()
+StyleHelpers.add_dlr_logo_to_page()
 
 # Title
 st.title("Home")

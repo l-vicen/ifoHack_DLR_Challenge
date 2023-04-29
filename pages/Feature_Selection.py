@@ -1,5 +1,5 @@
 # In-house lib
-from ressources import HelperFunctions
+from ressources import StyleHelpers
 
 # 3rd Party lib
 import streamlit as st
@@ -22,7 +22,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 # Sidebar Configuration
-HelperFunctions.add_dlr_logo_to_page()
+StyleHelpers.add_dlr_logo_to_page()
 
 # Prediction Model
 st.title("Feature Selection")

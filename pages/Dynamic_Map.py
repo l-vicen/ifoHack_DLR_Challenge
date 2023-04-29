@@ -2,77 +2,79 @@
 import streamlit as st
 from streamlit_folium import st_folium
 import folium
-from ressources import StyleHelpers
 
-# Sidebar Configuration
+from ressources import StyleHelpers
+from ressources import Macros
+from shapely.geometry import shape
+
 StyleHelpers.add_dlr_logo_to_page()
 
 ########## Data Processing ##########
-from shapely.geometry import shape, Point
+
 import geopandas as gpd
 import os  
 
 # Map Title
-st.title("Spatial Visualization")
+st.title("Map")
 
-def output():
-    ########## Output ##########
-    print("last neighborhoods FID:")
-    print(last_neighborhoods_fid)
-    print("last neighborhoods center coords:")
-    print(last_neighborhoods_coords)
-    print("last click coords:")
-    print(last_click_coords)
-########## Variables ##########
-# first latitude then longitude 
-last_neighborhoods_coords = [0, 0]
-last_neighborhoods_fid = 0
-last_click_coords = [0, 0]
+def execute_iteraction(city_name):
 
-#fixed value 
-berlin_hbf = Point(13.369398652505957, 52.52508850317093)
-POI_coord =  gpd.GeoSeries([berlin_hbf], crs='EPSG:4326')
+    if city_name == "Berlin":
+        hbf_coordinate = Macros.BERLIN_HBF
+        map= gpd.read_file(Macros.PATH_BERLIN_DATA)
+    elif city_name == "Bremen":
+        pass
+    elif city_name == "Dresden":
+        pass
+    elif city_name == "Koln":
+        pass
+    else:
+        pass
 
-########## Load GeoPackage source file ########## 
-#Enable for only using testing data 
-map= gpd.read_file("./data/1 Land Prices/Land_Prices_Neighborhood_Berlin.gpkg")
-m = map.explore(height=500, width=1000, name="Neighborhoods")
+    POI_coord =  gpd.GeoSeries([hbf_coordinate], crs='EPSG:4326')
 
-#######################################################################################
-district_centroid = map.geometry.centroid.to_crs(epsg=3035)
+    m = map.explore(height=500, width=1000, name="Neighborhoods")
+    district_centroid = map.geometry.centroid.to_crs(epsg=3035)
+    district_centroid.distance(POI_coord.to_crs(epsg=3035).iloc[0])
 
-# Create a FeatureGroup for the markers
-marker_group = folium.FeatureGroup(name='Markers')
+    ########## Variables ##########
+    # first latitude then longitude 
+    last_neighborhoods_coords = [0, 0]
+    last_neighborhoods_fid = 0
+    last_click_coords = [0, 0]
 
-# Add a marker to the FeatureGroup
-marker = folium.Marker([berlin_hbf.y, berlin_hbf.x])
-marker.add_to(marker_group)
-marker_group.add_to(m)
+    # Create a FeatureGroup for the markers
+    marker_group = folium.FeatureGroup(name='Markers')
 
-# Create a LayerControl widget for the map
-layer_ctrl = folium.LayerControl()
-m.add_child(layer_ctrl)
+    # Add a marker to the FeatureGroup
+    marker = folium.Marker([hbf_coordinate.y, hbf_coordinate.x])
+    marker.add_to(marker_group)
+    marker_group.add_to(m)
 
-POI_marker = folium.LayerControl().add_to(m)
+    # Create a LayerControl widget for the map
+    layer_ctrl = folium.LayerControl()
+    m.add_child(layer_ctrl)
 
-# call to render Folium map in Streamlit
-st_data = st_folium(m, width=725)
+    POI_marker = folium.LayerControl().add_to(m)
 
-if st_data['last_active_drawing'] is not None:
-    keysList = list(st_data.keys())
+    # call to render Folium map in Streamlit
+    st_data = st_folium(m, width=725)
 
-    ########## Get FID and Coords ##########
-    last_neighborhoods_fid = st_data['last_active_drawing']['properties']['Neighborhood_FID']
-    last_click_coords = [st_data['last_clicked']['lat'], st_data['last_clicked']['lng']]
+    if st_data['last_active_drawing'] is not None:
 
-    ########## Get centroid from Area ##########
-    polygon_coords = st_data['last_active_drawing']['geometry']
-    coord = shape(polygon_coords).centroid
-    last_neighborhoods_coords = [coord.y, coord.x] #longitude / latitude
-    output()
+        ########## Get FID and Coords ##########
+        last_neighborhoods_fid = st_data['last_active_drawing']['properties']['Neighborhood_FID']
+        last_click_coords = [st_data['last_clicked']['lat'], st_data['last_clicked']['lng']]
 
+        ########## Get centroid from Area ##########
+        polygon_coords = st_data['last_active_drawing']['geometry']
+        coord = shape(polygon_coords).centroid
+        last_neighborhoods_coords = [coord.y, coord.x] #longitude / latitude
 
+        #layer_ctrl.remove_layer(marker_group)
 
+        st.metric("last neighborhoods FID:",last_neighborhoods_fid )
+        st.metric("last neighborhoods center coords:", last_neighborhoods_coords)
+        st.metric("last click coords:", last_click_coords)
 
-
-
+execute_iteraction("Berlin")
