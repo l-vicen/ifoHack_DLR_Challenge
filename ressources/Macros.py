@@ -6,5 +6,5 @@ in other files cleaner.
 
 GERMAN_CITIES = ["Berlin", "Bremen", "Dresden", "Frankfurt", "Köln"]
 
-DLR_LOGO = "/Users/lvicen/informatics/subjects/ifoHack/dlr_challenge/assets/DLR_Logo.png"
+DLR_LOGO = "assets/DLR_Logo.png"
 
