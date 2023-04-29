@@ -8,3 +8,13 @@
 4. Run the application by: `streamlit run app.py`
 
 ---
+
+## Conda CheatSheet Commands
+
+```
+conda env export > environment.yml
+```
+
+```
+
+```
