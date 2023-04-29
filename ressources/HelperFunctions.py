@@ -14,5 +14,5 @@ def add_dlr_logo_to_page():
     st.sidebar.markdown('Justin Zhang')
     st.sidebar.markdown('Lucas Perasolo')
     st.sidebar.markdown('Rohan Walia')
-    st.sidebar.markdown('Sandro')
+    st.sidebar.markdown('Sandro Barrius')
     st.sidebar.markdown('---')
