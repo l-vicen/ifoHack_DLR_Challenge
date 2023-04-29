@@ -3,3 +3,6 @@ from ressources import HelperFunctions
 
 # Sidebar Configuration
 HelperFunctions.add_dlr_logo_to_page()
+
+# Title
+st.title("Static Map")

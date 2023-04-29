@@ -5,10 +5,11 @@ import folium
 import geopandas as gpd
 from streamlit_folium import st_folium
 
+# Sidebar Configuration
 HelperFunctions.add_dlr_logo_to_page()
 
 # Map Title
-st.title("Map")
+st.title("Dynamic Map")
 
 #neighborhoods_berlin= gpd.read_file("test.gpkg")
 neighborhoods_berlin= gpd.read_file("./data/1 Land Prices/Land_Prices_Neighborhood_Berlin.gpkg")
