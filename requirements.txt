@@ -187,7 +187,7 @@ rich==12.4.4
 rsa==4.8
 s3transfer==0.6.0
 scikit-glpk==0.5.0
-scipy==1.10.1
+scipy==1.8.1
 SecretStorage==3.3.2
 semver==2.13.0
 Send2Trash==1.8.2
