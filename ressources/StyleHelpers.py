@@ -15,6 +15,7 @@ def add_dlr_logo_to_page():
     st.sidebar.markdown('Rohan Walia')
     st.sidebar.markdown('Sandro Barrius')
 
+# Sidebar Logo with CSS Styling
 def add_logo():
     st.markdown(
         """
