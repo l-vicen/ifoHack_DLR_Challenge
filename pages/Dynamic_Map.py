@@ -18,6 +18,9 @@ st.title("Spatial Visualization")
 st.info("In this page, the user is able to get insights into the predicted and actual prices of different neighborhood across German cities.")
 st.write("---")
 
+st.markdown("## Input")
+city = st.selectbox("Which city would you like to predict the prices", Macros.GERMAN_CITIES)
+
 def execute_iteraction(city_name):
 
     if city_name == "Berlin":
@@ -65,16 +68,15 @@ def execute_iteraction(city_name):
 
         st.write("last neighborhoods FID: {}".format(last_neighborhoods_fid))
         return last_neighborhoods_fid
-
-
-st.markdown("## Input")
-city = st.selectbox("Which city would you like to predict the prices", Macros.GERMAN_CITIES)
+    
 fdi = execute_iteraction(city)
+
 st.markdown("---")
-
+st.markdown("## Output")
 if (fdi != None):
-    st.markdown("## Output")
-
     actual_price, model_price = model.apply_predictor(fdi)
     st.metric("Actual Price", actual_price, 300)
     st.metric("Model Suggested Price", model_price, 250)
+    st.success("Prediction Terminated.")
+else:
+    st.warning("Click on a city neighborhood and discover what it has to offer!")

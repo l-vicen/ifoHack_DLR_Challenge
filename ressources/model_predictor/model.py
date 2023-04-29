@@ -3,6 +3,7 @@ import streamlit as st
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 
+@st.cache_resource
 def apply_predictor(fdi):
 
     # Dashboard for the data preprocessing that our team did
