@@ -1,3 +1,4 @@
 .DS_Store
 .ipynb_checkpoints
 ifoHack_DLR_Challenge_Data/
+.venv/
