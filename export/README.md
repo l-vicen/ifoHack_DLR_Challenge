@@ -15,6 +15,18 @@ https://l-vicen-ifohack-dlr-challenge-home-l0fflx.streamlit.app
 
 **On the Remote Server**
 
-[App](https://l-vicen-ifohack-dlr-challenge-home-l0fflx.streamlit.app/)
+[App Link](https://l-vicen-ifohack-dlr-challenge-home-l0fflx.streamlit.app/)
 
 ---
+
+# ## Team
+
+
+
+Justin Zhang
+
+Lucas Perasolo
+
+Rohan Walia
+
+Sandro Barrius
