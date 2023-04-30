@@ -1,9 +1,7 @@
 import pandas as pd
 import streamlit as st
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.decomposition import PCA
+from sklearn.linear_model import LinearRegression
 
 def preprocessing():
 
@@ -25,37 +23,36 @@ def preprocessing():
     df = pd.get_dummies(dataframe_total, columns=non_numeric_cols)
     df = df.drop(['City_Name', 'Unnamed: 0'], axis = 1)
 
-    df = df.dropna()
-
-    X = df.drop('Land_Value', axis = 1)
+    #Drop constant columns
+    #--------------------------------------------
+    # Calculate the variance of each column
+    variances = df.var()
+    # Define the variance threshold (e.g., 0.01)
+    var_threshold = 0.05
+    # Find the constant or almost constant columns
+    const_cols = variances[variances <= var_threshold].index
+    # Remove the constant or almost constant columns from the dataframe
+    df = df.drop(const_cols, axis=1)
+    #correlation analysis
+    #--------------------------------------------
+    correlations = df.corr()['Land_Value'].drop('Land_Value')
+    selected_cols = correlations[correlations > 0.5].index.tolist()
+    X = df[selected_cols]
     y = df['Land_Value']
-
-    scaler = StandardScaler()
-    scaler.fit(X)
-    X_normalized = scaler.transform(X)
-    # Create a PCA object
-    pca = PCA(n_components=10)
-    # Fit and transform the data
-    X = pca.fit_transform(X)
-
+    #Model: Linear Regression
+    #--------------------------------------------
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
-    rf = RandomForestRegressor(n_estimators=100, max_depth=5)
-    rf.fit(X_train, y_train)
+    model = LinearRegression()
+    model.fit(X_train, y_train)
 
-    return dataframe_total, X, rf
+    return dataframe_total, dataframe_no_labels, selected_cols, model
 
-def predictor(fdi, city, total_data_set, no_label_data_set, rf):
+def predictor(fdi, city, total_data_set, no_label_data_set, selected_columns, model):
     selected_row = total_data_set[(total_data_set['Neighborhood_FID'] == fdi) & (total_data_set['City_Name'] == city)]
     row_index = selected_row.index[0]
     real_price = selected_row["Land_Value"]
 
-    st.write(selected_row)
-    st.write(row_index)
-
-    no_label_data_set = pd.DataFrame(no_label_data_set)
-
-    parameters = no_label_data_set.loc[row_index]
-    model_suggested_price = rf.predict([parameters])
+    parameters = no_label_data_set.loc[row_index][selected_columns]
+    model_suggested_price = model.predict([parameters])
     
     return real_price, model_suggested_price
