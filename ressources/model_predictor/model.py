@@ -48,7 +48,6 @@ def preprocessing():
     return dataframe_total, dataframe_no_labels, selected_cols, model
 
 def predictor(fdi, city, total_data_set, no_label_data_set, selected_columns, model):
-    st.write(total_data_set)
     selected_row = total_data_set[(total_data_set['Neighborhood_FID'] == fdi) & (total_data_set['City_Name'] == city)]
     row_index = selected_row.index[0]
     real_price = selected_row["Land_Value"]
@@ -56,7 +55,4 @@ def predictor(fdi, city, total_data_set, no_label_data_set, selected_columns, mo
     parameters = no_label_data_set.loc[row_index][selected_columns]
     model_suggested_price = model.predict([parameters])
     
-    # st.write(real_price)
-    # st.write(model_suggested_price)
-
     return real_price, model_suggested_price

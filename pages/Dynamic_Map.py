@@ -5,6 +5,7 @@ import folium
 from ressources import StyleHelpers
 from ressources import Macros
 from ressources.model_predictor import model as impModel
+import math
 
 ########## Data Processing ##########
 import geopandas as gpd
@@ -70,9 +71,8 @@ def execute_iteraction(city_name):
         ########## Get centroid from Area ##########
         polygon_coords = st_data['last_active_drawing']['geometry']
         coord = shape(polygon_coords).centroid
-        last_neighborhoods_coords = [coord.y, coord.x] #longitude / latitude
-        st.metric("last neighborhoods FID:",last_neighborhoods_fid )
-        
+        last_neighborhoods_coords = [coord.y, coord.x] # longitude / latitude
+
         random_marker = folium.Marker(location=last_neighborhoods_coords , icon=folium.Icon(color='red'),)
         hbf_marker = folium.Marker(location=[hbf_coordinate.y, hbf_coordinate.x], icon=folium.Icon(color='red'),)
         line = folium.PolyLine([last_neighborhoods_coords , (hbf_coordinate.y, hbf_coordinate.x)], color="red", weight=2, opacity=1).add_to(m)
@@ -93,8 +93,10 @@ st.markdown("---")
 st.markdown("## Output")
 if (fdi != None):
     actual_price, model_price = impModel.predictor(fdi, city, dataframe_total, dataframe_no_labels, selected_cols, model)
-    st.metric("Actual Price", actual_price, 300)
-    st.metric("Model Suggested Price", model_price, 250)
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Actual Price ($)", round(actual_price, 2))
+    col2.metric("Model Suggested Price ($)", round(float(model_price), 2))
+    col3.metric("Precision Ratio (%)", round(float((actual_price / model_price * 100)), 2))
     st.success("Prediction Terminated.")
 else:
     st.warning("Click on a city neighborhood and discover what it has to offer!")
