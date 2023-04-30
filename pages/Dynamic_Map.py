@@ -5,10 +5,16 @@ import folium
 from ressources import StyleHelpers
 from ressources import Macros
 from ressources.model_predictor import model as impModel
+import matplotlib.pyplot as plt
+import osmnx as ox
+import networkx as nx
+import numpy as np
+import os
 
 ########## Data Processing ##########
 import geopandas as gpd
 from shapely.geometry import shape
+import shapely
 
 # Sidebar Style
 StyleHelpers.add_dlr_logo_to_page()
@@ -29,26 +35,51 @@ city = st.selectbox("Which city would you like to predict the prices", Macros.GE
 
 if "markers" not in st.session_state:
    st.session_state["markers"] = []
+if 'fid' not in st.session_state:
+    st.session_state['fid'] = None
+if "last_clicked" not in st.session_state:
+    st.session_state["last_clicked"] = None
 
 def execute_iteraction(city_name):
-
     if city_name == "Berlin":
         hbf_coordinate = Macros.BERLIN_HBF
         map= gpd.read_file(Macros.PATH_BERLIN_DATA)
+        neighborhood= gpd.read_file(Macros.PATH_BERLIN_NEIGHBOUR)
     elif city_name == "Bremen":
         hbf_coordinate = Macros.BREMEN_HBF
         map= gpd.read_file(Macros.PATH_BREMEN_DATA)
+        neighborhood= gpd.read_file(Macros.PATH_BREMEN_NEIGHBOUR)
     elif city_name == "Dresden":
         hbf_coordinate = Macros.DRESDEN_HBF
         map= gpd.read_file(Macros.PATH_DRESDEN_DATA)
+        neighborhood= gpd.read_file(Macros.PATH_DRESDEN_NEIGHBOUR)
     elif city_name == "Köln":
         hbf_coordinate = Macros.KOELN_HBF
         map= gpd.read_file(Macros.PATH_KOLN_DATA)
+        neighborhood= gpd.read_file(Macros.PATH_KOLN_NEIGHBOUR)
     else:
         hbf_coordinate = Macros.FRANKFURT_HBF
         map= gpd.read_file(Macros.PATH_FRANKFURT_DATA)
+        neighborhood= gpd.read_file(Macros.PATH_FRANKFURT_NEIGHBOUR)
 
     m = map.explore(height=500, width=1000, name="Neighborhoods")
+
+    
+    if st.session_state["fid"] is not None:
+        bremen = neighborhood.to_crs(epsg = 4326)
+
+        restaurants = ox.geometries.geometries_from_polygon(polygon = bremen.geometry.iloc[st.session_state["fid"]-1], tags = {"amenity":"restaurant"})
+
+        G = ox.graph_from_polygon(bremen.geometry.iloc[st.session_state["fid"]-1], network_type = "walk", simplify = False)
+        graph_nodes, graph_edges = ox.graph_to_gdfs(G)
+
+        m = bremen.explore(m=m, tooltip = False, popup = False, highlight = False,
+                        style_kwds=dict(color="red",weight=2, opacity=1, fillOpacity=0))
+
+        m = graph_edges.explore(m=m, color="blue", name="Streets")
+        m = graph_nodes.explore(m=m, color = "blue", name = "Nodes")
+        m = restaurants.explore(m=m, color = "yellow", name = "Restaurants", marker_kwds=dict(radius=7))
+    folium.LayerControl().add_to(m)
 
     ########## Variables ##########
     # first latitude then longitude 
@@ -60,8 +91,7 @@ def execute_iteraction(city_name):
     fg = folium.FeatureGroup(name="Markers")
     for marker in st.session_state["markers"]:
         fg.add_child(marker)
-    if "last_clicked" not in st.session_state:
-       st.session_state["last_clicked"] = None
+
 
     # call to render Folium map in Streamlit
     st_data = st_folium(m, feature_group_to_add=fg, height=450, width=1000,)
@@ -84,12 +114,34 @@ def execute_iteraction(city_name):
         st.session_state["markers"].append(random_marker)
         st.session_state["markers"].append(hbf_marker)
         st.session_state["markers"].append(line)
+
         
         if ( st_data["last_clicked"] and st_data["last_clicked"] != st.session_state["last_clicked"]):
             st.session_state["last_clicked"] = st_data["last_clicked"]
+            st.session_state["fid"] = last_neighborhoods_fid
             st.experimental_rerun()
         
         return last_neighborhoods_fid
+
+    if st.button('Dislay Spider Map'):
+        st.session_state["spider"] = True
+        print("Clear 1")
+        district_centroid = map.geometry.centroid.to_crs(epsg=4326)
+        st.session_state["markers"].clear()
+        hbf_marker = folium.Marker(location=[hbf_coordinate.y, hbf_coordinate.x], icon=folium.Icon(color='red'),)
+        st.session_state["markers"].append(hbf_marker)
+        for geom in district_centroid:
+            print(geom)
+            center_marker = folium.Marker(location=[geom.y, geom.x] , icon=folium.Icon(color='red'),)
+            line = folium.PolyLine([[geom.y, geom.x] , (hbf_coordinate.y, hbf_coordinate.x)], color="red", weight=2, opacity=1)
+            st.session_state["markers"].append(center_marker)
+            st.session_state["markers"].append(line)
+        st.experimental_rerun()
+
+    if st.button('Clean Map'):
+        st.session_state["markers"].clear()
+        st.experimental_rerun()
+    
     
 fdi = execute_iteraction(city)
 

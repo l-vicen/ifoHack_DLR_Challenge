@@ -25,3 +25,10 @@ PATH_KOLN_DATA = "data/1 Land Prices/Land_Prices_Neighborhood_Koeln.gpkg"
 PATH_DRESDEN_DATA = "data/1 Land Prices/Land_Prices_Neighborhood_Dresden.gpkg"
 PATH_BREMEN_DATA = "data/1 Land Prices/Land_Prices_Neighborhood_Bremen.gpkg"
 PATH_FRANKFURT_DATA = "data/1 Land Prices/Land_Prices_Neighborhood_Frankfurt_am_Main.gpkg"
+
+#Relative Path to datasets 
+PATH_BERLIN_NEIGHBOUR = "ifoHack_DLR_Challenge_Data/3 Neighborhoods/Neighborhoods_Berlin.gpkg"
+PATH_BREMEN_NEIGHBOUR = "ifoHack_DLR_Challenge_Data/3 Neighborhoods/Neighborhoods_Bremen.gpkg"
+PATH_KOLN_NEIGHBOUR = "ifoHack_DLR_Challenge_Data/3 Neighborhoods/Neighborhoods_Köln.gpkg"
+PATH_DRESDEN_NEIGHBOUR = "ifoHack_DLR_Challenge_Data/3 Neighborhoods/Neighborhoods_Dresden.gpkg"
+PATH_FRANKFURT_NEIGHBOUR = "ifoHack_DLR_Challenge_Data/3 Neighborhoods/Neighborhoods_Frankfurt_am_Main.gpkg"
