@@ -18,7 +18,7 @@ st.title("Spatial Visualization")
 st.info("In this page, the user is able to get insights into the predicted and actual prices of different neighborhood across German cities.")
 st.write("---")
 
-dataframe_total, dataframe_no_labels, model = impModel.preprocessing()
+dataframe_total, pca, rf = impModel.preprocessing()
 
 st.markdown("## Input")
 city = st.selectbox("Which city would you like to predict the prices", Macros.GERMAN_CITIES)
@@ -91,10 +91,10 @@ fdi = execute_iteraction(city)
 st.markdown("---")
 st.markdown("## Output")
 if (fdi != None):
-    actual_price, model_price = impModel.predictor(fdi, city, dataframe_total, dataframe_no_labels, model)
+    actual_price, model_price = impModel.predictor(fdi, city, dataframe_total, pca, rf)
     col1, col2, col3 = st.columns(3)
     col1.metric("Actual Price ($)", round(actual_price, 2))
-    col2.metric("Model Suggested Price ($)", round(float(model_price), 2))
+    col2.metric("Predicted Price ($)", round(float(model_price), 2))
     ratio = round(float(model_price / actual_price  * 100),2)
     col3.metric("Precision Ratio (%)", ratio)
 

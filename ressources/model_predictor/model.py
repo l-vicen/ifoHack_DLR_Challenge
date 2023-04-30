@@ -18,43 +18,56 @@ def preprocessing():
     pathTwo = "data/Total_No_Land_Values.csv"
 
     dataframe_total = load_data(pathOne) # Used for training
-    dataframe_no_labels = load_data(pathTwo)
 
     # make columns numerical
     non_numeric_cols = ['Area_Types']
     df = pd.get_dummies(dataframe_total, columns=non_numeric_cols)
     df = df.drop(['City_Name', 'Unnamed: 0'], axis = 1)
-
     df = df.dropna()
+
 
     X = df.drop('Land_Value', axis = 1)
     y = df['Land_Value']
 
-    scaler = StandardScaler()
-    scaler.fit(X)
-    X_normalized = scaler.transform(X)
     # Create a PCA object
     pca = PCA(n_components=10)
     # Fit and transform the data
     X = pca.fit_transform(X)
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     rf = RandomForestRegressor(n_estimators=100, max_depth=5)
-    rf.fit(X_train, y_train)
+    rf.fit(X, y)
 
-    return dataframe_total, X, rf
+    return dataframe_total, pca, rf
 
-def predictor(fdi, city, total_data_set, no_label_data_set, rf):
+def predictor(fdi, city, total_data_set, pca, rf):
     
     try:
         selected_row = total_data_set[(total_data_set['Neighborhood_FID'] == fdi) & (total_data_set['City_Name'] == city)]
+        # st.write(selected_row)
+        
         row_index = selected_row.index[0]
-        real_price = selected_row["Land_Value"]
-        no_label_data_set = pd.DataFrame(no_label_data_set)
+        # st.write(row_index)
 
-        parameters = no_label_data_set.loc[row_index]
-        model_suggested_price = rf.predict([parameters])
+        real_price = selected_row["Land_Value"]
+        # st.write(real_price)
+        
+        non_numeric_cols = ['Area_Types']
+        df = pd.get_dummies(total_data_set, columns=non_numeric_cols)
+        df = df.drop(['City_Name', 'Unnamed: 0'], axis = 1)
+        df = df.dropna()
+  
+        X = df.drop('Land_Value', axis = 1)
+        # st.write(X)
+
+        parameters = X.loc[row_index]
+        # st.write(parameters)                
+                                        
+        parameters = pca.transform([parameters])
+        # st.write(parameters)  
+
+        model_suggested_price = rf.predict(parameters)
+        # st.write(model_suggested_price)
+
         return real_price, model_suggested_price
 
     except:
