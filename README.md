@@ -1,119 +1,30 @@
-```
-#TarantulasSubmission
-```
+# Tarantulas Submission
+## Project description
 
-```
-##Projectdescription
-```
+1. **Data Engineering**: Merging data of different shapes (land prices, buildings, Zensus, etc.)
+2. Generating features: Building new features by exploring other data streams such as OSM (number/length of travel paths) and World Cover (proportion of grassland, etc.)
+3. Feature reduction: Using PCA we projected a total of 200 features to 20 while maintaining 95% of the data science variance
+4. Model evaluation: Examination of different models (see Model Selection file) and scoring analysis
 
-```
+## How to test our product
 
-```
-
-```
-1.**DataEngineering**:Mergingdataofdifferentshapes(landprices,buildings,Zensus,etc.)
-```
-
-```
-2.Generatingfeatures:BuildingnewfeaturesbyexploringotherdatastreamssuchasOSM(number/lengthoftravelpaths)andWorldCover(proportionofgrassland,etc.)
-```
-
-```
-3.Featurereduction:UsingPCAweprojectedatotalof200featuresto20whilemaintaining95%ofthedatasciencevariance
-```
-
-```
-4.Modelevaluation:Examinationofdifferentmodels(seeModelSelectionfile)andscoringanalysis
-```
-
-```
-
-```
-
-```
-##Howtotestourproduct
-```
-
-```
-
-```
-
-```
 **Locally**
-```
 
-```
+1. Install Python and Anaconda
+2. Run following command to create the anaconda environment with all necessary dependencies:`conda create --name tarantulas --file requirements.txt`
+3. Activate environment with: `conda activate tarantulas`
+4. Run the application by: `streamlit run app.py`
 
-```
+  **On the Remote Server**
 
-```
-1.InstallPythonandAnaconda
-```
+> Access the app by clicking [This App Link](https://l-vicen-ifohack-dlr-challenge-home-l0fflx.streamlit.app/)
 
-```
-2.Runfollowingcommandtocreatetheanacondaenvironmentwithallnecessarydependencies:`condacreate--nametarantulas--filerequirements.txt`
-```
-
-```
-3.Activateenvironmentwith:`condaactivatetarantulas`
-```
-
-```
-4.Runtheapplicationby:`streamlitrunapp.py`
-```
-
-```
-
-```
-
-```
-  **OntheRemoteServer**
-```
-
-```
-
-```
-
-```
->Accesstheappbyclicking[ThisAppLink](https://l-vicen-ifohack-dlr-challenge-home-l0fflx.streamlit.app/)
-```
-
-```
-
-```
-
-```
 ---
-```
 
-```
+## Team Tarantulas Members
 
-```
-
-```
-##TeamTarantulasMembers
-```
-
-```
-
-```
-
-```
-*RohanWalia
-```
-
-```
-*YichenZhang
-```
-
-```
-*LucasVicentim
-```
-
-```
-*BillyHerrmann
-```
-
-```
-*SandroBarrios
-```
+* Rohan Walia
+* Yichen Zhang
+* Lucas Vicentim
+* Billy Herrmann
+* Sandro Barrios
