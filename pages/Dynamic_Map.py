@@ -90,20 +90,6 @@ def execute_iteraction(city_name):
             st.experimental_rerun()
         
         return last_neighborhoods_fid
-
-    # if st_data['last_active_drawing'] is not None:
-
-    #     ########## Get FID and Coords ##########
-    #     last_neighborhoods_fid = st_data['last_active_drawing']['properties']['Neighborhood_FID']
-    #     last_click_coords = [st_data['last_clicked']['lat'], st_data['last_clicked']['lng']]
-
-    #     ########## Get centroid from Area ##########
-    #     polygon_coords = st_data['last_active_drawing']['geometry']
-    #     coord = shape(polygon_coords).centroid
-    #     last_neighborhoods_coords = [coord.y, coord.x] #longitude / latitude
-
-    #     st.write("last neighborhoods FID: {}".format(last_neighborhoods_fid))
-    #     return last_neighborhoods_fid
     
 fdi = execute_iteraction(city)
 
