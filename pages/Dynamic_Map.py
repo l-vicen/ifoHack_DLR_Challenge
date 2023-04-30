@@ -93,7 +93,7 @@ st.markdown("## Output")
 if (fdi != None):
     actual_price, model_price = impModel.predictor(fdi, city, dataframe_total, pca, rf)
     col1, col2, col3 = st.columns(3)
-    col1.metric("Actual Price ($)", round(actual_price, 2))
+    col1.metric("Actual Price ($)", round(float(actual_price), 2))
     col2.metric("Predicted Price ($)", round(float(model_price), 2))
     ratio = round(float(model_price / actual_price  * 100),2)
     col3.metric("Precision Ratio (%)", ratio)
