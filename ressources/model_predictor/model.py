@@ -25,7 +25,6 @@ def preprocessing():
     df = df.drop(['City_Name', 'Unnamed: 0'], axis = 1)
     df = df.dropna()
 
-
     X = df.drop('Land_Value', axis = 1)
     y = df['Land_Value']
 

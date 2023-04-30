@@ -21,7 +21,7 @@ https://l-vicen-ifohack-dlr-challenge-home-l0fflx.streamlit.app
 
 # ## Team
 
-
+Billy Herrmann
 
 Justin Zhang
 
