@@ -46,16 +46,19 @@ def preprocessing():
     return dataframe_total, X, rf
 
 def predictor(fdi, city, total_data_set, no_label_data_set, rf):
-    selected_row = total_data_set[(total_data_set['Neighborhood_FID'] == fdi) & (total_data_set['City_Name'] == city)]
-    row_index = selected_row.index[0]
-    real_price = selected_row["Land_Value"]
-
-    st.write(selected_row)
-    st.write(row_index)
-
-    no_label_data_set = pd.DataFrame(no_label_data_set)
-
-    parameters = no_label_data_set.loc[row_index]
-    model_suggested_price = rf.predict([parameters])
     
-    return real_price, model_suggested_price
+    try:
+        selected_row = total_data_set[(total_data_set['Neighborhood_FID'] == fdi) & (total_data_set['City_Name'] == city)]
+        row_index = selected_row.index[0]
+        real_price = selected_row["Land_Value"]
+        st.write(selected_row)
+        st.write(row_index)
+
+        no_label_data_set = pd.DataFrame(no_label_data_set)
+
+        parameters = no_label_data_set.loc[row_index]
+        model_suggested_price = rf.predict([parameters])
+        return real_price, model_suggested_price
+
+    except:
+        return -1.0, -1.0

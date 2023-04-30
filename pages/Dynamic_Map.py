@@ -98,11 +98,14 @@ if (fdi != None):
     ratio = round(float(model_price / actual_price  * 100),2)
     col3.metric("Precision Ratio (%)", ratio)
 
-    if (ratio >= 70 and ratio <= 130):
-        st.success("Reasonable Prediction")
-    elif (ratio >= 130):
-        st.error("Overestimation")
+    if ((float(actual_price) == -1) and (float(model_price) == -1)):
+        st.warning("No values exist because this neighborhood had compromised data and has been disconsidered.")
     else:
-        st.error("Underestimation")
+        if (ratio >= 70 and ratio <= 130):
+            st.success("Reasonable Prediction")
+        elif (ratio >= 130):
+            st.error("Overestimation")
+        else:
+            st.error("Underestimation")
 else:
     st.warning("Click on a city neighborhood and discover what it has to offer!")
