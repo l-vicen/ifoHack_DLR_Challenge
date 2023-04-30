@@ -9,3 +9,4 @@ st.title("Home")
 
 # Information
 st.info("Welcome to the Tarantulas Submission. In our app, you are able to get insight into land prices across German cities. Our prediction is based on a simple feature we have created called: SpiderNetz.")
+st.markdown("---")

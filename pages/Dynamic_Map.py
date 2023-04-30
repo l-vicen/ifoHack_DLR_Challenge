@@ -19,10 +19,6 @@ st.info("In this page, the user is able to get insights into the predicted and a
 st.write("---")
 
 dataframe_total, dataframe_no_labels, selected_cols, model = impModel.preprocessing()
-# st.dataframe(dataframe_total)
-# st.dataframe(dataframe_no_labels)
-# st.write(selected_cols)
-# st.write(model)
 
 st.markdown("## Input")
 city = st.selectbox("Which city would you like to predict the prices", Macros.GERMAN_CITIES)
