@@ -41,7 +41,7 @@ def execute_iteraction(city_name):
     elif city_name == "Dresden":
         hbf_coordinate = Macros.DRESDEN_HBF
         map= gpd.read_file(Macros.PATH_DRESDEN_DATA)
-    elif city_name == "Koln":
+    elif city_name == "Köln":
         hbf_coordinate = Macros.KOELN_HBF
         map= gpd.read_file(Macros.PATH_KOLN_DATA)
     else:

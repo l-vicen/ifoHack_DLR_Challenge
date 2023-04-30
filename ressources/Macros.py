@@ -21,7 +21,7 @@ KOELN_HBF = Point(6.958572139550114, 50.9433787324542)
 
 # Relative Path to datasets
 PATH_BERLIN_DATA = "./data/1 Land Prices/Land_Prices_Neighborhood_Berlin.gpkg"
-PATH_KOLN_DATA = "data/1 Land Prices/Land_Prices_Neighborhood_Köln.gpkg"
+PATH_KOLN_DATA = "data/1 Land Prices/Land_Prices_Neighborhood_Koeln.gpkg"
 PATH_DRESDEN_DATA = "data/1 Land Prices/Land_Prices_Neighborhood_Dresden.gpkg"
 PATH_BREMEN_DATA = "data/1 Land Prices/Land_Prices_Neighborhood_Bremen.gpkg"
 PATH_FRANKFURT_DATA = "data/1 Land Prices/Land_Prices_Neighborhood_Frankfurt_am_Main.gpkg"
